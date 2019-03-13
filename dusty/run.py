@@ -222,6 +222,7 @@ def process_results(default_config, start_time, global_results=None, html_report
 
 
 def main():
+    print('new_feature_taranova')
     start_time = time()
     global_results = []
     global_other_results = []
