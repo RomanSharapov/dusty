@@ -99,11 +99,18 @@ class SastyWrapper(object):
                 config['devdep'] = composition_analysis
             elif isinstance(composition_analysis, dict):
                 config['devdep'] = composition_analysis.get('devdep', True)
-        params = []
-        for fn in scan_fns:
-            params.append((fn, config))
+                config['parallel_run'] = composition_analysis.get('parallel_run', False)
         all_results = []
-        results = run_in_parallel(params)
+        if config.get('parallel_run', False):
+            params = []
+            for fn in scan_fns:
+                params.append((fn, config))
+
+            results = run_in_parallel(params)
+        else:
+            results = []
+            for scan_fn in scan_fns:
+                scan_fn(config, results)
         for result in results:
             all_results.extend(result)
         return all_results
