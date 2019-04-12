@@ -174,7 +174,7 @@ class DustyWrapper(object):
                 )
                 if not auth_id:
                     raise RuntimeError("Auth record was not created")
-                add_auth_record(project_id, project_name, auth_id)
+                qualys.add_auth_record(project_id, project_name, auth_id)
             logging.info("Qualys: starting scan")
             scan_id = qualys.start_scan(project_name, ts, project_id, qualys_profile_id, scanner_appliance, auth_record_id=auth_id)
             if not scan_id:

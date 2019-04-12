@@ -65,7 +65,7 @@ class WAS(object):
         return None if root.responseCode.text != 'SUCCESS' else root.data.WebApp.id.text
 
     def add_auth_record(self, project_id, project_name, auth_id):
-        call = '/update/was/webapp/{project_id}'
+        call = f'/update/was/webapp/{project_id}'
         body = f'<ServiceRequest><data><WebApp>' \
                f'<name>{project_name}</name>' \
                f'<authRecords><add><WebAppAuthRecord>' \
