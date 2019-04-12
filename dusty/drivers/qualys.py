@@ -52,13 +52,22 @@ class WAS(object):
         except:
             return 0  # On error - allow to try to delete stale project
 
-    def create_webapp_request(self, project_name, application_url, scan_profile):
+    def create_webapp_request(self, project_name, application_url, scan_profile, excludes=None):
         call = '/create/was/webapp'
         body = f'<ServiceRequest><data><WebApp>' \
                f'<name>{project_name}</name>' \
                f'<url>{application_url}</url>' \
-               f'<defaultProfile><id>{scan_profile}</id></defaultProfile>' \
-               f'</WebApp></data></ServiceRequest>'
+               f'<defaultProfile><id>{scan_profile}</id></defaultProfile>'
+        if excludes:
+            body += f'<urlBlacklist><set>'
+            for item in excludes:
+                body += f'<UrlEntry regex="true"><![CDATA[{item}]]></UrlEntry>'
+            body += f'</set></urlBlacklist>'
+            body += f'<postDataBlacklist><set>'
+            for item in excludes:
+                body += f'<UrlEntry regex="true"><![CDATA[{item}]]></UrlEntry>'
+            body += f'</set></postDataBlacklist>'
+        body += f'</WebApp></data></ServiceRequest>'
         response = self.client.request(call, data=body, api_version="webapp")
         logging.debug("Qualys: API response: %s", str(response))
         root = objectify.fromstring(response.encode("utf-8", errors="ignore"))

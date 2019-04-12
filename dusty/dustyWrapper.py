@@ -161,7 +161,10 @@ class DustyWrapper(object):
                 scanner_appliance = f"<type>{qualys_scanner_type}</type>"
             if not project_id:
                 logging.info("Qualys: creating webapp")
-                project_id = qualys.create_webapp_request(project_name, target, qualys_profile_id)
+                project_id = qualys.create_webapp_request(
+                    project_name, target, qualys_profile_id,
+                    excludes=config.get("exclude", None)
+                )
             if not project_id:
                 raise RuntimeError("Something went wrong and project wasn't found and created")
             if config.get("auth_script", None):
