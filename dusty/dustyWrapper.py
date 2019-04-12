@@ -164,8 +164,18 @@ class DustyWrapper(object):
                 project_id = qualys.create_webapp_request(project_name, target, qualys_profile_id)
             if not project_id:
                 raise RuntimeError("Something went wrong and project wasn't found and created")
+            if config.get("auth_script", None):
+                logging.info("Qualys: creating auth record")
+                auth_id = qualys.create_auth_record(
+                    project_name, ts,
+                    config.get("auth_script"),
+                    config.get("auth_login", ""),
+                    config.get("auth_password", "")
+                )
+                if not auth_id:
+                    raise RuntimeError("Auth record was not created")
             logging.info("Qualys: starting scan")
-            scan_id = qualys.start_scan(project_name, ts, project_id, qualys_profile_id, scanner_appliance)
+            scan_id = qualys.start_scan(project_name, ts, project_id, qualys_profile_id, scanner_appliance, auth_record_id=auth_id)
             if not scan_id:
                 raise RuntimeError("Scan haven't been started")
             logging.info("Qualys: waiting for scan to finish")
