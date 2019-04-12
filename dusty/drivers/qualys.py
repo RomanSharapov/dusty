@@ -64,6 +64,21 @@ class WAS(object):
         root = objectify.fromstring(response.encode("utf-8", errors="ignore"))
         return None if root.responseCode.text != 'SUCCESS' else root.data.WebApp.id.text
 
+    def add_auth_record(self, project_id, project_name, auth_id):
+        call = '/update/was/webapp/{project_id}'
+        body = f'<ServiceRequest><data><WebApp>' \
+               f'<name>{project_name}</name>' \
+               f'<authRecords><add><WebAppAuthRecord>' \
+               f'<id>{auth_id}</id>' \
+               f'</WebAppAuthRecord></add></authRecords>' \
+               f'</WebApp></data></ServiceRequest>'
+        response = self.client.request(call, data=body, api_version="webapp")
+        logging.debug("Qualys: API response: %s", str(response))
+        root = objectify.fromstring(response.encode("utf-8", errors="ignore"))
+        if root.responseCode.text != 'SUCCESS':
+            raise RuntimeError(f"Failed to add auth record")
+        return root.responseCode.text == 'SUCCESS'
+
     def create_auth_record(self, project_name, ts, auth_script, auth_login, auth_password):
         call = '/create/was/webappauthrecord'
         body = f'<ServiceRequest><data><WebAppAuthRecord>' \
