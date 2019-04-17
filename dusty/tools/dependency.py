@@ -28,6 +28,8 @@ def resolve_depencies(modules_ordered_dict):
     # Prepare module name map
     module_name_map = dict()
     for item in modules_ordered_dict:
+        log.debug(modules_ordered_dict[item].__class__)
+        log.debug(modules_ordered_dict[item].__class__.__name__)
         module_name_map[modules_ordered_dict[item].__class__.__name__.split(".")[-2]] = item
     log.debug(module_name_map)
 
