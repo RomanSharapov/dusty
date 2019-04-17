@@ -28,7 +28,7 @@ def resolve_depencies(modules_ordered_dict):
     # Prepare module name map
     module_name_map = dict()
     for item in modules_ordered_dict:
-        module_name_map[modules_ordered_dict[item].__name__.split(".")[-2]] = item
+        module_name_map[modules_ordered_dict[item].__class__.__name__.split(".")[-2]] = item
     log.debug(module_name_map)
 
 
