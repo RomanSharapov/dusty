@@ -1,0 +1,25 @@
+# Dusty configuration
+config_version: 2
+suites: # Test suites
+  test: # Suite name
+    general: # General config
+      scanners:
+        dast:
+          target: https://test/app/
+          exclude:
+          - https://test/logout.*
+        sast:
+          code_path: /code
+    scanners: # Scanner config
+      dast:
+        zap:
+          scan_types: all
+    processing: # Processing config
+      false_positive:
+        file: /tmp/false_positive.config
+      min_severity_filter:
+        severity: Major
+    reporters: # Reporter config
+      html:
+        report_path: /report
+        report_name: report.html

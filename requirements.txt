@@ -1,0 +1,5 @@
+setuptools==41.0.0
+PyYAML==5.1
+ruamel.yaml==0.15.92
+python-owasp-zap-v2.4==0.0.14
+reportportal-client @ git+https://github.com/reportportal/client-Python.git#egg=reportportal-client
