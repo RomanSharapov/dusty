@@ -28,18 +28,38 @@ def resolve_depencies(modules_ordered_dict):
     # Prepare module name map
     module_name_map = dict()
     for item in modules_ordered_dict:
-        log.debug(modules_ordered_dict[item].__class__)
-        log.debug(modules_ordered_dict[item].__class__.__name__)
-        log.debug(modules_ordered_dict[item].__class__.__module__)
         module_name_map[modules_ordered_dict[item].__class__.__module__.split(".")[-2]] = item
-    log.debug(module_name_map)
+    log.debug("Modules: %s", str(module_name_map.keys()))
+    # Check required depencies
+    for module_name in module_name_map:
+        for dependency in module_name_map[module_name].depends_on():
+            if dependency not in module_name_map:
+                log.error("Dependency %s not present (required by %s)", dependency, module_name)
+                raise RuntimeError("Required dependency not present")
+    # Walk modules
+    module_order = list()
+    visited_modules = set()
+    for module_name in module_name_map:
+        if module_name not in module_order:
+            _walk_module_depencies(module_name, module_name_map, module_order, visited_modules)
+    # Re-order modules
+    log.debug("Order: %s", str(module_order))
 
 
-class DependentModule:
-    """ Module with depencies """
-
-    def __init__(self, name, depencies=None):
-        self.name = name
-        self.depencies = list()
-        if isinstance(depencies, list):
-            self.depencies.extend(depencies)
+def _walk_module_depencies(module_name, module_name_map, module_order, visited_modules):
+    # Collect depencies
+    depencies = list()
+    depencies.extend(module_name_map[module_name].depends_on())
+    for optional_dependency in module_name_map[module_name].run_before():
+        if optional_dependency in module_name_map:
+            depencies.append(optional_dependency)
+    # Resolve
+    visited_modules.add(module_name)
+    for dependency in depencies:
+        if dependency not in module_order:
+            if dependency in visited_modules:
+                log.error("Circular dependency (%s <-> %s)", dependency, module_name)
+                raise RuntimeError("Circular dependency present")
+            _walk_module_depencies(dependency, module_name_map, module_order, visited_modules)
+    # Add to resolved order
+    module_order.append(module_name)
