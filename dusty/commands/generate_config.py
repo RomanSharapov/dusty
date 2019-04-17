@@ -16,7 +16,7 @@
 #   limitations under the License.
 
 """
-    Command: sampleconfig
+    Command: generate-config
 """
 
 import ruamel.yaml
@@ -81,7 +81,7 @@ class Command(ModuleModel, CommandModel):
     @staticmethod
     def get_name():
         """ Command name """
-        return "sampleconfig"
+        return "generate-config"
 
     @staticmethod
     def get_description():
