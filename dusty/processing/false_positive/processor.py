@@ -76,7 +76,7 @@ class Processor(DependentModuleModel, ProcessorModel):
     @staticmethod
     def get_name():
         """ Module name """
-        return "false_positive"
+        return "False-positive"
 
     @staticmethod
     def get_description():

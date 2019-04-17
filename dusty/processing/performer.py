@@ -26,6 +26,7 @@ import pkgutil
 from ruamel.yaml.comments import CommentedMap
 
 from dusty.tools import log
+from dusty.tools import dependency
 from dusty.models.module import ModuleModel
 from dusty.models.performer import PerformerModel
 
@@ -62,6 +63,8 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
                 self.context.processing[processor.get_name()] = processor(self.context)
             except:
                 log.exception("Failed to prepare processor %s", processor_name)
+        # Resolve depencies
+        dependency.resolve_depencies(self.context.processing)
 
     def perform(self):
         """ Perform action """

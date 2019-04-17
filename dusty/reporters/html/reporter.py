@@ -85,7 +85,7 @@ class Reporter(DependentModuleModel, ReporterModel):
     @staticmethod
     def get_name():
         """ Reporter name """
-        return "html"
+        return "HTML"
 
     @staticmethod
     def get_description():

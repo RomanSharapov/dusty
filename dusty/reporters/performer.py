@@ -27,6 +27,7 @@ import pkgutil
 from ruamel.yaml.comments import CommentedMap
 
 from dusty.tools import log
+from dusty.tools import dependency
 from dusty.models.module import ModuleModel
 from dusty.models.performer import PerformerModel
 from dusty.models.reporter import ReporterModel
@@ -68,6 +69,8 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
                 self.context.reporters[reporter.get_name()] = reporter(self.context)
             except:
                 log.exception("Failed to prepare reporter %s", reporter_name)
+        # Resolve depencies
+        dependency.resolve_depencies(self.context.reporters)
 
     def perform(self):
         """ Perform action """

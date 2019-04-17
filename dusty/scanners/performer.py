@@ -26,6 +26,7 @@ import pkgutil
 from ruamel.yaml.comments import CommentedMap
 
 from dusty.tools import log
+from dusty.tools import dependency
 from dusty.models.module import ModuleModel
 from dusty.models.performer import PerformerModel
 
@@ -67,6 +68,8 @@ class ScanningPerformer(ModuleModel, PerformerModel):
                         "Failed to prepare %s scanner %s",
                         scanner_type, scanner_name
                     )
+        # Resolve depencies
+        dependency.resolve_depencies(self.context.scanners)
 
     def perform(self):
         """ Perform action """
