@@ -40,7 +40,7 @@ class Scanner(DependentModuleModel, ScannerModel):
     def execute(self):
         """ Run the scanner """
         log.debug(f"Config: {self.config}")
-        for scanner in ["bandit", "pylint"]:
+        for scanner in ["bandit"]:
             log.info("Adding %s scanner", scanner)
             self.context.performers["scanning"].schedule_scanner("sast", scanner, self.config)
 
