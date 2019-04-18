@@ -58,11 +58,11 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
                 # Validate config
                 processor.validate_config(config[processor_name])
                 # Add to context
-                self.context.processing[processor.get_name()] = processor(self.context)
+                self.context.processors[processor.get_name()] = processor(self.context)
             except:
                 log.exception("Failed to prepare processor %s", processor_name)
         # Resolve depencies
-        dependency.resolve_depencies(self.context.processing)
+        dependency.resolve_depencies(self.context.processors)
 
     def perform(self):
         """ Perform action """
@@ -77,12 +77,12 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
         perform_processing_iteration = True
         while perform_processing_iteration:
             perform_processing_iteration = False
-            for processor_module_name in list(self.context.processing):
+            for processor_module_name in list(self.context.processors):
                 if processor_module_name in performed:
                     continue
                 performed.add(processor_module_name)
                 perform_processing_iteration = True
-                processor = self.context.processing[processor_module_name]
+                processor = self.context.processors[processor_module_name]
                 try:
                     processor.execute()
                 except:
@@ -94,8 +94,8 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             module_name = importlib.import_module(
                 f"dusty.processors.{module}.processor"
             ).Processor.get_name()
-            if module_name in self.context.processing:
-                return self.context.processing[module_name].get_meta(name, default)
+            if module_name in self.context.processors:
+                return self.context.processors[module_name].get_meta(name, default)
             return default
         except:
             return default
@@ -107,7 +107,7 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             processor = importlib.import_module(
                 f"dusty.processors.{processor_name}.processor"
             ).Processor
-            if processor.get_name() in self.context.processing:
+            if processor.get_name() in self.context.processors:
                 log.debug("Processor %s already scheduled", processor_name)
                 return
             # Prepare config
@@ -123,9 +123,9 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             # Validate config
             processor.validate_config(config[processor_name])
             # Add to context
-            self.context.processing[processor.get_name()] = processor(self.context)
+            self.context.processors[processor.get_name()] = processor(self.context)
             # Resolve depencies
-            dependency.resolve_depencies(self.context.processing)
+            dependency.resolve_depencies(self.context.processors)
             # Done
             log.debug("Scheduled processor %s", processor_name)
         except:

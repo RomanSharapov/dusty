@@ -36,6 +36,6 @@ class RunContext:
         self.results = list()
         self.errors = dict()  # scanner -> errors
         self.scanners = LastUpdatedOrderedDict()  # scanner -> instance
-        self.processing = LastUpdatedOrderedDict()  # processor -> instance
+        self.processors = LastUpdatedOrderedDict()  # processor -> instance
         self.reporters = LastUpdatedOrderedDict()  # reporter -> instance
         self.performers = dict()  # performer -> instance
