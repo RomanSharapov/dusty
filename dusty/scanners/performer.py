@@ -140,6 +140,9 @@ class ScanningPerformer(ModuleModel, PerformerModel):
             scanner.validate_config(config[scanner_type][scanner_name])
             # Add to context
             self.context.scanners[scanner.get_name()] = scanner(self.context)
+            # Resolve depencies
+            dependency.resolve_depencies(self.context.scanners)
+            # Done
             log.info("Scheduled scanner %s.%s", scanner_type, scanner_name)
         except:
             log.exception(
