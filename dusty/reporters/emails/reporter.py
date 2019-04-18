@@ -80,7 +80,7 @@ class Reporter(DependentModuleModel, ReporterModel):
     @staticmethod
     def run_after():
         """ Return optional depencies """
-        return ["html"]
+        return ["html", "jira"]
 
     @staticmethod
     def get_name():
