@@ -45,8 +45,6 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
         if "processing" in self.context.config["general"]:
             general_config = self.context.config["general"]["processing"]
         config = self.context.config["processing"]
-        if not isinstance(config, dict):
-            config = dict()
         for processor_name in config:
             # Merge general config
             merged_config = general_config.copy()
@@ -93,6 +91,37 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             return default
         except:
             return default
+
+    def schedule_processor(self, processor_name, processor_config):
+        """ Schedule processor run in current context after all already configured processors """
+        try:
+            # Init processor instance
+            processor = importlib.import_module(
+                f"dusty.processing.{processor_name}.processor"
+            ).Processor
+            if processor.get_name() in self.context.processing:
+                log.debug("Processor %s already scheduled", processor_name)
+                return
+            # Prepare config
+            config = self.context.config["processing"]
+            if processor_name not in config or not isinstance(config[processor_name], dict):
+                config[processor_name] = dict()
+            if "processing" in self.context.config["general"]:
+                general_config = self.context.config["general"]["processing"]
+                merged_config = general_config.copy()
+                merged_config.update(config[processor_name])
+                config[processor_name] = merged_config
+            config[processor_name].update(processor_config)
+            # Validate config
+            processor.validate_config(config[processor_name])
+            # Add to context
+            self.context.processing[processor.get_name()] = processor(self.context)
+            # Resolve depencies
+            dependency.resolve_depencies(self.context.processing)
+            # Done
+            log.info("Scheduled processor %s", processor_name)
+        except:
+            log.exception("Failed to schedule processor %s", processor_name)
 
     @staticmethod
     def fill_config(data_obj):

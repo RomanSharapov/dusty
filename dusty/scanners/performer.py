@@ -119,7 +119,7 @@ class ScanningPerformer(ModuleModel, PerformerModel):
                 f"dusty.scanners.{scanner_type}.{scanner_name}.scanner"
             ).Scanner
             if scanner.get_name() in self.context.scanners:
-                log.info("Scanner %s.%s already scheduled", scanner_type, scanner_name)
+                log.debug("Scanner %s.%s already scheduled", scanner_type, scanner_name)
                 return
             # Prepare config
             config = self.context.config["scanners"]
@@ -146,7 +146,7 @@ class ScanningPerformer(ModuleModel, PerformerModel):
             log.info("Scheduled scanner %s.%s", scanner_type, scanner_name)
         except:
             log.exception(
-                "Failed to prepare %s scanner %s",
+                "Failed to schedule %s scanner %s",
                 scanner_type, scanner_name
             )
 

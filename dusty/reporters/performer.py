@@ -51,8 +51,6 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
         if "reporters" in self.context.config["general"]:
             general_config = self.context.config["general"]["reporters"]
         config = self.context.config["reporters"]
-        if not isinstance(config, dict):
-            config = dict()
         for reporter_name in config:
             # Merge general config
             merged_config = general_config.copy()
@@ -87,6 +85,37 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
             return default
         except:
             return default
+
+    def schedule_reporter(self, reporter_name, reporter_config):
+        """ Schedule reporter run in current context after all already configured reporters """
+        try:
+            # Init reporter instance
+            reporter = importlib.import_module(
+                f"dusty.reporters.{reporter_name}.reporter"
+            ).Reporter
+            if reporter.get_name() in self.context.reporters:
+                log.debug("Reporter %s already scheduled", reporter_name)
+                return
+            # Prepare config
+            config = self.context.config["reporters"]
+            if reporter_name not in config or not isinstance(config[reporter_name], dict):
+                config[reporter_name] = dict()
+            if "reporters" in self.context.config["general"]:
+                general_config = self.context.config["general"]["reporters"]
+                merged_config = general_config.copy()
+                merged_config.update(config[reporter_name])
+                config[reporter_name] = merged_config
+            config[reporter_name].update(reporter_config)
+            # Validate config
+            reporter.validate_config(config[reporter_name])
+            # Add to context
+            self.context.reporters[reporter.get_name()] = reporter(self.context)
+            # Resolve depencies
+            dependency.resolve_depencies(self.context.reporters)
+            # Done
+            log.info("Scheduled reporter %s", reporter_name)
+        except:
+            log.exception("Failed to schedule reporter %s", reporter_name)
 
     def report(self):
         """ Report """
