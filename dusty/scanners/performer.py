@@ -115,7 +115,10 @@ class ScanningPerformer(ModuleModel, PerformerModel):
                 return
             # Prepare config
             config = self.context.config["scanners"]
-            if not isinstance(config[scanner_type][scanner_name], dict):
+            if scanner_type not in config:
+                config[scanner_type] = dict()
+            if scanner_name not in config[scanner_type] or \
+                    not isinstance(config[scanner_type][scanner_name], dict):
                 config[scanner_type][scanner_name] = dict()
             general_config = dict()
             if "scanners" in self.context.config["general"]:
