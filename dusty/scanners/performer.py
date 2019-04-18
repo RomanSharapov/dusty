@@ -77,17 +77,25 @@ class ScanningPerformer(ModuleModel, PerformerModel):
         reporting = self.context.performers.get("reporting", None)
         if reporting:
             reporting.on_start()
-        while self.context.scanners:
-            scanner_module_name, scanner = self.context.scanners.popitem()
-            log.info(f"Running {scanner_module_name} ({scanner.get_description()})")
-            if reporting:
-                reporting.on_scanner_start(scanner_module_name)
-            try:
-                scanner.execute()
-            except:
-                log.exception("Scanner %s failed", scanner_module_name)
-            if reporting:
-                reporting.on_scanner_finish(scanner_module_name)
+        performed = set()
+        perform_scan_iteration = True
+        while perform_scan_iteration:
+            perform_scan_iteration = False
+            for scanner_module_name in list(self.context.scanners):
+                if scanner_module_name in performed:
+                    continue
+                performed.add(scanner_module_name)
+                perform_scan_iteration = True
+                scanner = self.context.scanners[scanner_module_name]
+                log.info(f"Running {scanner_module_name} ({scanner.get_description()})")
+                if reporting:
+                    reporting.on_scanner_start(scanner_module_name)
+                try:
+                    scanner.execute()
+                except:
+                    log.exception("Scanner %s failed", scanner_module_name)
+                if reporting:
+                    reporting.on_scanner_finish(scanner_module_name)
         if reporting:
             reporting.on_finish()
 
