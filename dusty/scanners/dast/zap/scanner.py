@@ -113,9 +113,6 @@ class Scanner(DependentModuleModel, ScannerModel):
             self._zap_daemon.wait()
             self._zap_daemon = None
 
-
-
-
         # # ZAP wrapper
         # tool_name = "ZAP"
         # results = list()
