@@ -26,7 +26,7 @@ from dusty.models.command import CommandModel
 from dusty.helpers.context import RunContext
 from dusty.helpers.config import ConfigHelper
 from dusty.scanners.performer import ScanningPerformer
-from dusty.processing.performer import ProcessingPerformer
+from dusty.processors.performer import ProcessingPerformer
 from dusty.reporters.performer import ReportingPerformer
 
 

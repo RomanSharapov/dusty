@@ -53,7 +53,7 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             try:
                 # Init processor instance
                 processor = importlib.import_module(
-                    f"dusty.processing.{processor_name}.processor"
+                    f"dusty.processors.{processor_name}.processor"
                 ).Processor
                 # Validate config
                 processor.validate_config(config[processor_name])
@@ -92,7 +92,7 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
         """ Get submodule meta value """
         try:
             module_name = importlib.import_module(
-                f"dusty.processing.{module}.processor"
+                f"dusty.processors.{module}.processor"
             ).Processor.get_name()
             if module_name in self.context.processing:
                 return self.context.processing[module_name].get_meta(name, default)
@@ -105,7 +105,7 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
         try:
             # Init processor instance
             processor = importlib.import_module(
-                f"dusty.processing.{processor_name}.processor"
+                f"dusty.processors.{processor_name}.processor"
             ).Processor
             if processor.get_name() in self.context.processing:
                 log.debug("Processor %s already scheduled", processor_name)
@@ -146,7 +146,7 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             if not pkg:
                 continue
             processor = importlib.import_module(
-                "dusty.processing.{}.processor".format(name)
+                "dusty.processors.{}.processor".format(name)
             )
             processing_obj.insert(
                 len(processing_obj), name, CommentedMap(),
