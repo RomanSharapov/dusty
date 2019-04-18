@@ -73,12 +73,20 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             self.context.results.extend(scanner.get_results())
             self.context.errors[scanner_module_name] = scanner.get_errors()
         # Run processors
-        for processor_module_name in self.context.processing:
-            processor = self.context.processing[processor_module_name]
-            try:
-                processor.execute()
-            except:
-                log.exception("Processor %s failed", processor_module_name)
+        performed = set()
+        perform_processing_iteration = True
+        while perform_processing_iteration:
+            perform_processing_iteration = False
+            for processor_module_name in list(self.context.processing):
+                if processor_module_name in performed:
+                    continue
+                performed.add(processor_module_name)
+                perform_processing_iteration = True
+                processor = self.context.processing[processor_module_name]
+                try:
+                    processor.execute()
+                except:
+                    log.exception("Processor %s failed", processor_module_name)
 
     def get_module_meta(self, module, name, default=None):
         """ Get submodule meta value """

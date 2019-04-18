@@ -121,12 +121,20 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
         """ Report """
         log.info("Starting reporting")
         # Run reporters
-        for reporter_module_name in self.context.reporters:
-            reporter = self.context.reporters[reporter_module_name]
-            try:
-                reporter.report()
-            except:
-                log.exception("Reporter %s failed", reporter_module_name)
+        performed = set()
+        perform_report_iteration = True
+        while perform_report_iteration:
+            perform_report_iteration = False
+            for reporter_module_name in list(self.context.reporters):
+                if reporter_module_name in performed:
+                    continue
+                performed.add(reporter_module_name)
+                perform_report_iteration = True
+                reporter = self.context.reporters[reporter_module_name]
+                try:
+                    reporter.report()
+                except:
+                    log.exception("Reporter %s failed", reporter_module_name)
 
     def on_start(self):
         """ Called when testing starts """
