@@ -80,7 +80,7 @@ class Reporter(DependentModuleModel, ReporterModel):
     @staticmethod
     def run_before():
         """ Return optional depencies """
-        return ["email"]
+        return []
 
     @staticmethod
     def get_name():
