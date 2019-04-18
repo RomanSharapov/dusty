@@ -113,7 +113,7 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
             # Resolve depencies
             dependency.resolve_depencies(self.context.reporters)
             # Done
-            log.info("Scheduled reporter %s", reporter_name)
+            log.debug("Scheduled reporter %s", reporter_name)
         except:
             log.exception("Failed to schedule reporter %s", reporter_name)
 

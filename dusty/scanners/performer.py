@@ -143,7 +143,7 @@ class ScanningPerformer(ModuleModel, PerformerModel):
             # Resolve depencies
             dependency.resolve_depencies(self.context.scanners)
             # Done
-            log.info("Scheduled scanner %s.%s", scanner_type, scanner_name)
+            log.debug("Scheduled scanner %s.%s", scanner_type, scanner_name)
         except:
             log.exception(
                 "Failed to schedule %s scanner %s",

@@ -127,7 +127,7 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
             # Resolve depencies
             dependency.resolve_depencies(self.context.processing)
             # Done
-            log.info("Scheduled processor %s", processor_name)
+            log.debug("Scheduled processor %s", processor_name)
         except:
             log.exception("Failed to schedule processor %s", processor_name)
 
