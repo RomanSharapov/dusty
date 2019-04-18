@@ -16,7 +16,7 @@
 #   limitations under the License.
 
 """
-    Reporter: html
+    Reporter: jira
 """
 
 from dusty.tools import log
@@ -65,7 +65,7 @@ class Reporter(DependentModuleModel, ReporterModel):
     @staticmethod
     def fill_config(data_obj):
         """ Make sample config """
-        data_obj.insert(len(data_obj), "file", "/path/to/report.html", comment="HTML report path")
+        data_obj.insert(len(data_obj), "file", "/path/to/report.html", comment="report path")
 
     @staticmethod
     def validate_config(config):
@@ -85,9 +85,9 @@ class Reporter(DependentModuleModel, ReporterModel):
     @staticmethod
     def get_name():
         """ Reporter name """
-        return "HTML"
+        return "Jira"
 
     @staticmethod
     def get_description():
         """ Reporter description """
-        return "HTML reporter"
+        return "Jira reporter"

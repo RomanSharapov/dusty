@@ -53,7 +53,7 @@ def _walk_module_depencies(module_name, module_name_map, module_order, visited_m
     # Collect depencies
     depencies = list()
     depencies.extend(module_name_map[module_name].depends_on())
-    for optional_dependency in module_name_map[module_name].run_before():
+    for optional_dependency in module_name_map[module_name].run_after():
         if optional_dependency in module_name_map:
             depencies.append(optional_dependency)
     # Resolve

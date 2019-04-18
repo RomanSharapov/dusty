@@ -53,6 +53,6 @@ class DependentModuleModel(ModuleModel):
         raise NotImplementedError()
 
     @staticmethod
-    def run_before():
+    def run_after():
         """ Return optional depencies """
         raise NotImplementedError()

@@ -16,7 +16,7 @@
 #   limitations under the License.
 
 """
-    Reporter: email
+    Reporter: emails
 """
 
 from dusty.tools import log
@@ -65,7 +65,7 @@ class Reporter(DependentModuleModel, ReporterModel):
     @staticmethod
     def fill_config(data_obj):
         """ Make sample config """
-        data_obj.insert(len(data_obj), "file", "/path/to/report.html", comment="HTML report path")
+        data_obj.insert(len(data_obj), "file", "/path/to/report.html", comment="report path")
 
     @staticmethod
     def validate_config(config):
@@ -78,7 +78,7 @@ class Reporter(DependentModuleModel, ReporterModel):
         return []
 
     @staticmethod
-    def run_before():
+    def run_after():
         """ Return optional depencies """
         return ["html"]
 

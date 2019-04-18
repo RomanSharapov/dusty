@@ -69,7 +69,7 @@ class Processor(DependentModuleModel, ProcessorModel):
         return []
 
     @staticmethod
-    def run_before():
+    def run_after():
         """ Return optional depencies """
         return []
 

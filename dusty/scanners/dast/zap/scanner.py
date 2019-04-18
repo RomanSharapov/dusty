@@ -357,7 +357,7 @@ class Scanner(DependentModuleModel, ScannerModel):
         return []
 
     @staticmethod
-    def run_before():
+    def run_after():
         """ Return optional depencies """
         return []
 
