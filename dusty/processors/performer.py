@@ -141,7 +141,7 @@ class ProcessingPerformer(ModuleModel, PerformerModel):
         )
         data_obj.insert(len(data_obj), "processing", CommentedMap(), comment="Processing config")
         processing_obj = data_obj["processing"]
-        processing_module = importlib.import_module("dusty.processing")
+        processing_module = importlib.import_module("dusty.processors")
         for _, name, pkg in pkgutil.iter_modules(processing_module.__path__):
             if not pkg:
                 continue
