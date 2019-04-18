@@ -29,7 +29,7 @@ class RunContext:
 
     def __init__(self, args):
         """ Initialize context instance """
-        log.info("Initializing context")
+        log.debug("Initializing context")
         self.args = args
         self.config = dict()
         self.suite = ""

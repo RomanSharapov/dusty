@@ -53,7 +53,7 @@ class Command(ModuleModel, CommandModel):
 
     def execute(self, args):
         """ Run the command """
-        log.info("Starting")
+        log.debug("Starting")
         if args.call_from_legacy:
             log.warning("Called from legacy entry point")
         # Make instances
@@ -80,7 +80,7 @@ class Command(ModuleModel, CommandModel):
         processing.perform()
         reporting.perform()
         # Done
-        log.info("Done")
+        log.debug("Done")
 
     @staticmethod
     def fill_config(data_obj):

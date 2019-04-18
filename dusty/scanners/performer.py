@@ -40,7 +40,7 @@ class ScanningPerformer(ModuleModel, PerformerModel):
 
     def prepare(self):
         """ Prepare for action """
-        log.info("Preparing")
+        log.debug("Preparing")
         general_config = dict()
         if "scanners" in self.context.config["general"]:
             general_config = self.context.config["general"]["scanners"]

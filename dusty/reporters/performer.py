@@ -46,7 +46,7 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
 
     def prepare(self):
         """ Prepare for action """
-        log.info("Preparing")
+        log.debug("Preparing")
         general_config = dict()
         if "reporters" in self.context.config["general"]:
             general_config = self.context.config["general"]["reporters"]
@@ -138,7 +138,7 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
 
     def on_start(self):
         """ Called when testing starts """
-        log.info("Testing started")
+        log.debug("Testing started")
         self.testing_start_time = time.time()
         # Run reporters
         for reporter_module_name in self.context.reporters:
@@ -165,7 +165,7 @@ class ReportingPerformer(ModuleModel, PerformerModel, ReporterModel):
 
     def on_scanner_start(self, scanner):
         """ Called when scanner starts """
-        log.info("Started scanning with %s", scanner)
+        log.debug("Started scanning with %s", scanner)
         self.scanner_start_time[scanner] = time.time()
         # Run reporters
         for reporter_module_name in self.context.reporters:

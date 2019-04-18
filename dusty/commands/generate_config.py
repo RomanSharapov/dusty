@@ -45,7 +45,7 @@ class Command(ModuleModel, CommandModel):
 
     def execute(self, args):
         """ Run the command """
-        log.info("Starting")
+        log.debug("Starting")
         # Make instances
         config = ConfigHelper
         scanning = ScanningPerformer
@@ -66,7 +66,8 @@ class Command(ModuleModel, CommandModel):
         with open(args.output_file, "wb") as output:
             yaml.dump(data, output)
         # Done
-        log.info("Done")
+        log.info("Made sample config: %s", args.output_file)
+        log.debug("Done")
 
     @staticmethod
     def fill_config(data_obj):
