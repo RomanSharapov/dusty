@@ -45,6 +45,8 @@ def resolve_depencies(modules_ordered_dict):
             _walk_module_depencies(module_name, module_name_map, module_order, visited_modules)
     # Re-order modules
     log.debug("Order: %s", str(module_order))
+    for module_name in module_order:
+        modules_ordered_dict.move_to_end(module_name_map[module_name].get_name())
 
 
 def _walk_module_depencies(module_name, module_name_map, module_order, visited_modules):
