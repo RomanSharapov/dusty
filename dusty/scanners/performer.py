@@ -103,6 +103,39 @@ class ScanningPerformer(ModuleModel, PerformerModel):
         except:
             return default
 
+    def schedule_scanner(self, scanner_type, scanner_name, scanner_config):
+        """ Schedule scanner run in current context after all already configured scanners """
+        try:
+            # Init scanner instance
+            scanner = importlib.import_module(
+                f"dusty.scanners.{scanner_type}.{scanner_name}.scanner"
+            ).Scanner
+            if scanner.get_name() in self.context.scanners:
+                log.info("Scanner %s.%s already scheduled", scanner_type, scanner_name)
+                return
+            # Prepare config
+            config = self.context.config["scanners"]
+            if not isinstance(config[scanner_type][scanner_name], dict):
+                config[scanner_type][scanner_name] = dict()
+            general_config = dict()
+            if "scanners" in self.context.config["general"]:
+                general_config = self.context.config["general"]["scanners"]
+            if scanner_type in general_config:
+                merged_config = general_config[scanner_type].copy()
+                merged_config.update(config[scanner_type][scanner_name])
+                config[scanner_type][scanner_name] = merged_config
+            config[scanner_type][scanner_name].update(scanner_config)
+            # Validate config
+            scanner.validate_config(config[scanner_type][scanner_name])
+            # Add to context
+            self.context.scanners[scanner.get_name()] = scanner(self.context)
+            log.info("Scheduled scanner %s.%s", scanner_type, scanner_name)
+        except:
+            log.exception(
+                "Failed to prepare %s scanner %s",
+                scanner_type, scanner_name
+            )
+
     @staticmethod
     def fill_config(data_obj):
         """ Make sample config """
