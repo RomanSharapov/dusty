@@ -77,7 +77,8 @@ class ScanningPerformer(ModuleModel, PerformerModel):
         reporting = self.context.performers.get("reporting", None)
         if reporting:
             reporting.on_start()
-        for scanner_module_name in list(self.context.scanners):
+        while self.context.scanners:
+            scanner_module_name = self.context.scanners.popitem()
             scanner = self.context.scanners[scanner_module_name]
             log.info(f"Running {scanner_module_name} ({scanner.get_description()})")
             if reporting:
