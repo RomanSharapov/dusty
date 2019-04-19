@@ -20,7 +20,7 @@
 """
 
 from dusty.tools import log
-from dusty.data import constants
+from dusty import constants
 from dusty.models.module import ModuleModel
 from dusty.models.command import CommandModel
 from dusty.helpers.context import RunContext

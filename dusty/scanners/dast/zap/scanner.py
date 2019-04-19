@@ -28,9 +28,10 @@ from ruamel.yaml.comments import CommentedMap
 from zapv2 import ZAPv2
 
 from dusty.tools import log
-from dusty.data import constants
 from dusty.models.module import DependentModuleModel
 from dusty.models.scanner import ScannerModel
+
+from . import constants
 
 
 class Scanner(DependentModuleModel, ScannerModel):

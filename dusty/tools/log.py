@@ -22,7 +22,7 @@
 import logging
 import inspect
 
-from dusty.data import constants
+from dusty import constants
 
 
 def init(level=logging.INFO):

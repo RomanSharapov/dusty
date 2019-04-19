@@ -27,7 +27,7 @@ import yaml
 from ruamel.yaml.comments import CommentedMap
 
 from dusty.tools import log
-from dusty.data import constants
+from dusty import constants
 
 
 class ConfigHelper:

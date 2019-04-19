@@ -20,13 +20,4 @@
 """
 
 
-LOG_FORMAT = "%(asctime)s - %(levelname)8s - %(name)s - %(message)s"
-LOG_DATE_FORMAT = "%Y.%m.%d %H:%M:%S %Z"
-
-DEFAULT_CONFIG_PATH = "/tmp/scan-config.yaml"
-DEFAULT_CONFIG_ENV_KEY = "CARRIER_SCAN_CONFIG"
-
-CONFIG_VERSION_KEY = "config_version"
-CURRENT_CONFIG_VERSION = 2
-
 ZAP_PATH = "/opt/zap/zap.jar"
