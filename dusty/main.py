@@ -38,14 +38,14 @@ def main():
         help="enable debug output",
         action="store_const", const=DEBUG, default=INFO
     )
-    parser = argparse.ArgumentParser(
-        parents=[parent],
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument(
+    parent.add_argument(
         "--call-from-legacy", dest="call_from_legacy",
         help=argparse.SUPPRESS,
         action="store_true", default=False
+    )
+    parser = argparse.ArgumentParser(
+        parents=[parent],
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     subparsers = parser.add_subparsers(
         dest="command", title="commands",
