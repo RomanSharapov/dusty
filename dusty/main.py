@@ -32,13 +32,15 @@ from dusty.tools import log
 def main():
     """ Main """
     # Initialize argument parser
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument(
+    parent = argparse.ArgumentParser(add_help=False)
+    parent.add_argument(
         "-d", "--debug", dest="log_level",
         help="enable debug output",
         action="store_const", const=DEBUG, default=INFO
+    )
+    parser = argparse.ArgumentParser(
+        parents=[parent],
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
         "--call-from-legacy", dest="call_from_legacy",
@@ -58,6 +60,7 @@ def main():
         module = importlib.import_module("dusty.commands.{}".format(name))
         argparser = subparsers.add_parser(
             module.Command.get_name(),
+            parents=[parent],
             help=module.Command.get_description(),
             formatter_class=argparse.ArgumentDefaultsHelpFormatter
         )
