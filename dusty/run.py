@@ -210,7 +210,6 @@ def config_from_yaml(args):
                           project_name=execution_config.get('project_name', 'None'),
                           environment=execution_config.get('environment', 'None'),
                           test_type=execution_config.get('test_type', 'None'),
-                          # rp_data_writer=rp_service,
                           jira_service=jira_service,
                           jira_mapping=execution_config.get('jira_mapping', prepare_jira_mapping(jira_service)),
                           min_priority=min_priority,
