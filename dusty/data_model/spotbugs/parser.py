@@ -13,6 +13,7 @@ __author__ = 'akaminski, arozumenko'
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import logging
 import hashlib
 import xml.etree.ElementTree
 from dusty.data_model.canonical_model import DefaultModel as Finding
@@ -26,6 +27,8 @@ def sanitize(input):
 
 class SpotbugsParser(object):
     def __init__(self, filename, test):
+        logging.debug("Spotbugs parser initialization")
+
         dupes = dict()
         find_date = None
 
@@ -72,3 +75,5 @@ class SpotbugsParser(object):
                 dupes[dupe_key].finding['steps_to_reproduce'].append(steps_to_reproduce)
 
         self.items = dupes.values()
+
+        logging.debug("Spotbugs output parsing done")
