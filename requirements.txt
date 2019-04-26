@@ -12,3 +12,4 @@ packaging==19.0
 influxdb==5.2.0
 python-owasp-zap-v2.4==0.0.14
 jsonpath-rw==1.4.0
+-e git+https://github.com/reportportal/client-Python.git#egg=reportportal-client
