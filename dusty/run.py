@@ -164,7 +164,7 @@ def launch_reportportal_service(rp_config):
     return rp_service
 
 
-def config_from_yaml(args):
+def read_config(args):
     def default_ctor(loader, tag_suffix, node):
         return tag_suffix + node.value
 
@@ -175,6 +175,12 @@ def config_from_yaml(args):
 
     yaml.add_multi_constructor('', default_ctor)
     config = variable_substitution(yaml.load(config_data))
+
+    return config
+
+
+def config_from_yaml(args):
+    config = read_config(args)
 
     test_name = args.suite
     if test_name not in list(config.keys()):
@@ -282,6 +288,13 @@ def process_results(default_config, start_time, global_results=None,
                     attachments=attachments, errors=global_errors)
 
 
+def list_of_available_suites(args):
+    config = read_config(args)
+    suites = list(config.keys())
+
+    return suites
+
+
 def main():
     parser = argparse.ArgumentParser(prog='dusty', description="DAST scanner executor")
 
@@ -289,10 +302,13 @@ def main():
                         default=os.environ.get("config_path", constants.PATH_TO_CONFIG))
     parser.add_argument("--fp-config", type=str, help=f"False positive config file path [{constants.PATH_TO_CONFIG}]",
                         default=os.environ.get("false_positive_path", constants.FALSE_POSITIVE_CONFIG), required=False)
-    parser.add_argument("--config-data", type=str, help="Config data provided as a string. "
-                                                        "This option will overwrite the config file if specified",
+    parser.add_argument("--config-data", type=str,
+                        help="Config data provided as a string. "
+                             "This option will overwrite the config file if specified",
                         default=os.environ.get(constants.CONFIG_ENV_KEY, None), required=False)
     parser.add_argument("-s", "--suite", type=str, help="Suite from the config file to execute", required=True)
+    parser.add_argument("-l", "--list", help="Print a list of available suites to execute and exit",
+                        action="store_true")
     parser.add_argument("-d", "--debug", help="Debug mode", default=os.environ.get("debug", False), action="store_true")
 
     args, unknown_args = parser.parse_known_args()
@@ -313,6 +329,10 @@ def main():
     logging.getLogger("qualysapi.connector").setLevel(logging.WARNING)
     logging.getLogger("qualysapi.config").setLevel(logging.WARNING)
     logging.getLogger("qualysapi.util").setLevel(logging.WARNING)
+
+    if args.list:
+        print(f"Available suites: {list_of_available_suites(args)}")
+        exit(0)
 
     start_time = time()
 
